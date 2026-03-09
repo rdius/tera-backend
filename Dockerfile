@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Le modèle d'embedding (~400 Mo) se télécharge au premier démarrage
-# et est mis en cache automatiquement par sentence-transformers
+# Pre-download embedding model at build time (faster cold start)
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')"
 
 COPY . .
 
